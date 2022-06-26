@@ -18,9 +18,12 @@ import os
 import os.path
 import pathlib
 import pickle
+import shutil
 from typing import Any
 
 from rich import print
+
+from image_gallery_organiser import cache
 
 
 def get_face_encodings(image_path: str) -> Any:
@@ -42,7 +45,10 @@ def get_face_encodings(image_path: str) -> Any:
 
 
 def clear_cache(root_dir: str = ".") -> None:
-    raise NotImplementedError()
+    try:
+        shutil.rmtree(cache.Cache.CACHE_DIR_NAME)
+    except FileNotFoundError:
+        pass
 
 
 def process_directory(
