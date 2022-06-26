@@ -1,0 +1,18 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+end_of_line = lf
+
+[*.py]
+profile = black
+indent_style = space
+max_line_length = 79
+src_paths=template_python_project,tests,setup.py
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
