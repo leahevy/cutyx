@@ -25,7 +25,7 @@ import cutyx as _cutyx
 
 @pytest.fixture(autouse=True)
 def add_imports(doctest_namespace: dict[str, Any]) -> None:
-    doctest_namespace["img"] = _cutyx
+    doctest_namespace["cutyx"] = _cutyx
 
 
 @pytest.fixture()
