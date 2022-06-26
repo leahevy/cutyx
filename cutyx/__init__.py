@@ -1,4 +1,4 @@
-""" A Python project template.
+""" Tool to organise your image gallery using machine learning.
 
 Copyright (C) 2022 Leah Lackner
 
@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .. include:: ../README.md
 """
-from cutyx import examples, lib
+from cutyx import examples, exceptions, lib
 from cutyx.__version__ import (
     __major_version__,
     __minor_version__,
@@ -33,4 +33,4 @@ __email__ = "leah.lackner+github@gmail.com"
 __license__ = "GPLv3"
 __maintainer__ = "Leah Lackner"
 
-__all__ = ["lib", "examples"]
+__all__ = ["lib", "examples", "exceptions"]

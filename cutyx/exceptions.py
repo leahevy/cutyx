@@ -13,6 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Exceptions used within this project."""
+
 
 class FacesException(Exception):
+    """Base exception thrown by errors in `CutyX`."""
+
     pass

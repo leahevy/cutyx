@@ -13,9 +13,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Utility functions used within `Cutyx`."""
+
 import os
 import os.path
 
 
 def mksymlink(target: str, linkpath: str) -> None:
+    """Creates a symlink and automatically resolves it as a relative path.
+
+    :param target: The target file to be linked to.
+
+    :param linkpath: The path of the generated link.
+    """
     os.symlink(os.path.relpath(target, os.path.dirname(linkpath)), linkpath)

@@ -22,20 +22,22 @@ import urllib.request
 DIR = os.path.abspath("./tests/image-gallery")
 
 
-def download_image(url: str) -> None:
+def download_image(url: str, filename: str | None = None) -> None:
     if not os.path.exists(DIR):
         raise ValueError("Image directory does not exist")
-    filename = url.rsplit("/", 1)[1]
-    if ":" in filename:
-        filename = filename.rsplit(":", 1)[1]
-    if "?" in filename:
-        filename = filename.rsplit("?", 1)[1]
-    if "=" in filename:
-        filename = filename.rsplit("=", 1)[1]
-    if not (
-        filename.lower().endswith(".jpg") or filename.lower().endswith(".jpeg")
-    ):
-        filename += ".jpg"
+    if not filename:
+        filename = url.rsplit("/", 1)[1]
+        if ":" in filename:
+            filename = filename.rsplit(":", 1)[1]
+        if "?" in filename:
+            filename = filename.rsplit("?", 1)[1]
+        if "=" in filename:
+            filename = filename.rsplit("=", 1)[1]
+        if not (
+            filename.lower().endswith(".jpg")
+            or filename.lower().endswith(".jpeg")
+        ):
+            filename += ".jpg"
     print(f"Download '{url}'")
     urllib.request.urlretrieve(url, os.path.join(DIR, filename))
 
@@ -49,34 +51,48 @@ def clear_images() -> None:
 
 def download_images() -> None:
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg",
+        "einstein1.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg",
+        "einstein2.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/5/50/Albert_Einstein_%28Nobel%29.png"
+        "https://upload.wikimedia.org/wikipedia/commons/5/50/Albert_Einstein_%28Nobel%29.png",
+        "einstein3.png",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg",
+        "puurrrr.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/e/e8/Lc3_2018_%28263682303%29_%28cropped%29.jpeg"
+        "https://upload.wikimedia.org/wikipedia/commons/e/e8/Lc3_2018_%28263682303%29_%28cropped%29.jpeg",
+        "linus1.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/2/28/Richard_Stallman_at_LibrePlanet_2019.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/2/28/Richard_Stallman_at_LibrePlanet_2019.jpg",
+        "stallman1.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guido-portrait-2014-drc.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guido-portrait-2014-drc.jpg",
+        "guido1.jpg",
     )
     download_image(
-        "https://static.wikia.nocookie.net/elfen-lied/images/6/64/Kaede_Manga.jpg/revision/latest?cb=20180922143710"
+        "https://static.wikia.nocookie.net/elfen-lied/images/6/64/Kaede_Manga.jpg/revision/latest?cb=20180922143710",
+        "manga.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/8/8c/Self-portrait_at_13_by_Albrecht_D%C3%BCrer.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/8/8c/Self-portrait_at_13_by_Albrecht_D%C3%BCrer.jpg",
+        "portrait1.jpg",
     )
     download_image(
-        "https://upload.wikimedia.org/wikipedia/commons/c/c5/Edward_Law._Pencil_drawing_by_H._M._Raeburn%2C_1909._Wellcome_V0003431.jpg"
+        "https://upload.wikimedia.org/wikipedia/commons/c/c5/Edward_Law._Pencil_drawing_by_H._M._Raeburn%2C_1909._Wellcome_V0003431.jpg",
+        "drawing1.jpg",
+    )
+    download_image(
+        "https://cdn.arstechnica.net/wp-content/uploads/2013/02/linus-eff-you-640x363.png",
+        "linus2.png",
     )
 
 

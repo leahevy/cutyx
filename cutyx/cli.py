@@ -13,9 +13,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""This is the main module docstring.
+"""This is the CLI of `CutyX`.
 
-Some description comes here.
+For the implementation of the commands the `typer` library is used. This
+CLI only contains stubs. All the logic is implemented in the `lib` module.
 """
 
 import os
