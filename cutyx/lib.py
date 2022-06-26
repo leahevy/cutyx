@@ -25,6 +25,7 @@ from typing import Any
 from rich import print
 
 from cutyx.exceptions import FacesException
+from cutyx.utils import mksymlink
 
 FACES_DIR_NAME = ".cutyx-faces.d"
 CACHE_BASE_NAME = ".cutyx-cache.d"
@@ -200,7 +201,7 @@ def process_directory(
                             f"'{os.path.basename(album_dir)}/' ++[/blue]"
                         )
                     if not dry_run:
-                        os.symlink(
+                        mksymlink(
                             file,
                             os.path.join(album_dir, os.path.basename(file)),
                         )
@@ -350,7 +351,7 @@ def add_persons(
             os.remove(symlink_path)
         except FileNotFoundError:
             pass
-        os.symlink(os.path.abspath(training_image_path), symlink_path)
+        mksymlink(os.path.abspath(training_image_path), symlink_path)
 
 
 def is_valid_image(image_path: str) -> bool:
