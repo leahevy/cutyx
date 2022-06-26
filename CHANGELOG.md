@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+v1.1.0 (2022-06-26)
+-------------------
+- Fix cutyx for nested album directories. [Leah Lackner]
+
+
 v1.0.2 (2022-06-26)
 -------------------
 - Enable pypi releasing. [Leah Lackner]
