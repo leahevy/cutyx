@@ -33,7 +33,7 @@ def read_requirements(file: str) -> list[str]:
 
 setup_info = dict(
     name="cutyx",
-    version="1.0.0",
+    version="1.0.1",
     author="Leah Lackner",
     author_email="leah.lackner+github@gmail.com",
     url="https://github.com/leahevy/cutyx",

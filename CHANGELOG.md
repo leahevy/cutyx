@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+v1.0.1 (2022-06-26)
+-------------------
+- Fix version option. [Leah Lackner]
+
+
 v1.0.0 (2022-06-26)
 -------------------
 - Rename doctest package alias. [Leah Lackner]
