@@ -14,3 +14,41 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+import os
+
+import pytest
+
+from cutyx.lib import add_persons, process_directory, process_image
+from tests import download_images
+
+
+@pytest.fixture(scope="session", autouse=True)
+def download_images_fixture() -> None:
+    download_images.clear_images()
+    download_images.download_images()
+
+
+@pytest.fixture()
+def gallery_path() -> str:
+    return download_images.DIR
+
+
+def test_happy_path(gallery_path: str) -> None:
+    os.mkdir("albums")
+
+    img1 = os.path.join(gallery_path, "Albert_Einstein_Head.jpg")
+    add_persons("albums/a", img1, training_data_prefix="albert")
+
+    process_image(img1, "albums")
+    files = [
+        file for file in os.listdir("albums/a") if not file.startswith(".")
+    ]
+    assert len(files) == 1
+    assert "Albert_Einstein_Head.jpg" in files
+
+    process_directory(".", "albums")
+    files = [
+        file for file in os.listdir("albums/a") if not file.startswith(".")
+    ]
+    assert len(files) == 3

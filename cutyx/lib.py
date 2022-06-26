@@ -63,6 +63,24 @@ def process_directory(
         only_process_files = [os.path.abspath(f) for f in only_process_files]
         for f in only_process_files:
             check_valid_image(f)
+    image_files = find_image_files(root_dir)
+    if not quiet:
+        if not image_files:
+            print("[red]++ Found no images ++[/red]")
+        else:
+            print(f"[green]++ Found {len(image_files)} images ++[/green]")
+
+
+def find_image_files(root_dir: str) -> list[str]:
+    images: list[str] = []
+    for root, _, fnames in os.walk(
+        root_dir, topdown=True, onerror=None, followlinks=True
+    ):
+        for fname in fnames:
+            fpath = os.path.join(root_dir, root, fname)
+            if is_valid_image(fpath):
+                images.append(fpath)
+    return images
 
 
 def process_image(
@@ -161,6 +179,19 @@ def add_persons(
         except FileNotFoundError:
             pass
         os.symlink(os.path.abspath(training_image_path), symlink_path)
+
+
+def is_valid_image(image_path: str) -> bool:
+    if not os.path.exists(image_path):
+        return False
+    if not os.path.isfile(image_path):
+        return False
+    if not (
+        image_path.lower().endswith(".jpg")
+        or image_path.lower().endswith(".jpeg")
+    ):
+        return False
+    return True
 
 
 def check_valid_image(image_path: str) -> None:
