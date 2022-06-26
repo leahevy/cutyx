@@ -35,6 +35,21 @@ TRAINING_IMAGE_DIR_EXT = TRAINING_IMAGE_FILE_PART + ".d"
 TRAINING_IMAGE_SRC_EXT = TRAINING_IMAGE_FILE_PART + ".src"
 
 
+def is_included(
+    path: str,
+    only_process_files: list[str] | None = None,
+) -> bool:
+    if only_process_files:
+        basename = os.path.basename(path)
+        for file in only_process_files:
+            basename2 = os.path.basename(file)
+            if basename == basename2:
+                return True
+    else:
+        return True
+    return False
+
+
 def update_cache(
     root_dir: str = ".",
     only_process_files: list[str] | None = None,
@@ -53,17 +68,7 @@ def update_cache(
     image_files_root = find_image_files(root_dir, for_albums=False)
 
     for image in image_files_root:
-        generate_cache_for_file = True
-        if only_process_files:
-            generate_cache_for_file = False
-            basename = os.path.basename(image)
-            for file in only_process_files:
-                basename2 = os.path.basename(file)
-                if basename == basename2:
-                    generate_cache_for_file = True
-                    break
-
-        if not generate_cache_for_file:
+        if not is_included(image, only_process_files):
             continue
 
         with open(image, "rb") as f:
@@ -151,17 +156,15 @@ def process_directory(
             image_files_albums = find_image_files(
                 albums_root_dir, for_albums=True
             )
-            for file in only_process_files:
-                basename = os.path.basename(file)
-                for file2 in image_files_albums:
-                    basename2 = os.path.basename(file2)
-                    if basename == basename2:
-                        if not quiet:
-                            print(
-                                f"  [blue]++ Remove previously classified image '{file}' ++[/blue]"
-                            )
-                        if not dry_run:
-                            os.remove(file2)
+            for image_album_file in image_files_albums:
+                if is_included(image_album_file, only_process_files):
+                    if not quiet:
+                        print(
+                            "  [blue]++ Remove previously classified image "
+                            f"'{os.path.basename(image_album_file)}' ++[/blue]"
+                        )
+                    if not dry_run:
+                        os.remove(image_album_file)
         else:
             for album_dir in album_dirs:
                 album_dir_files = [
