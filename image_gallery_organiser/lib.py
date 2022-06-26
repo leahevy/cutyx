@@ -46,6 +46,7 @@ def get_face_encodings(image_path: str) -> Any:
 
 
 def clear_cache(root_dir: str = ".") -> None:
+    root_dir = os.path.abspath(root_dir)
     if not os.path.exists(root_dir):
         raise FacesException(f"Root directory ({root_dir}) does not exist.")
     if not os.path.isdir(root_dir):
