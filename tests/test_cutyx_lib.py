@@ -37,12 +37,7 @@ def gallery_path() -> str:
 def test_happy_path_dir(gallery_path: str) -> None:
     os.mkdir("albums")
 
-    files = [
-        file for file in os.listdir(gallery_path) if not file.startswith(".")
-    ]
-    assert len(files) == 10
-
-    img1 = os.path.join(gallery_path, "Albert_Einstein_Head.jpg")
+    img1 = os.path.join(gallery_path, "einstein1.jpg")
     add_persons("albums/a", img1, training_data_prefix="albert")
 
     process_directory(gallery_path, "albums")
@@ -55,17 +50,12 @@ def test_happy_path_dir(gallery_path: str) -> None:
 def test_happy_path_single(gallery_path: str) -> None:
     os.mkdir("albums")
 
-    files = [
-        file for file in os.listdir(gallery_path) if not file.startswith(".")
-    ]
-    assert len(files) == 10
-
-    img1 = os.path.join(gallery_path, "Albert_Einstein_Head.jpg")
+    img1 = os.path.join(gallery_path, "einstein1.jpg")
     add_persons("albums/a", img1, training_data_prefix="albert")
 
     process_image(img1, "albums")
     files = [
         file for file in os.listdir("albums/a") if not file.startswith(".")
     ]
-    assert "Albert_Einstein_Head.jpg" in files
+    assert "einstein1.jpg" in files
     assert len(files) == 1
