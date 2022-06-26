@@ -178,6 +178,7 @@ def process_directory(
                     if not dry_run:
                         os.remove(os.path.join(album_dir, album_dir_file))
 
+    num_processed = 0
     for album_dir in album_dirs:
         if not quiet:
             print(
@@ -194,6 +195,7 @@ def process_directory(
             if do_process and person_matches(
                 file, album_dir, cache_root_dir=cache_root_dir, quiet=quiet
             ):
+                num_processed += 1
                 if symlink:
                     if not quiet:
                         print(
@@ -221,16 +223,20 @@ def process_directory(
                             os.path.join(album_dir, os.path.basename(file)),
                         )
 
+    if num_processed == 0:
+        raise FacesException("No images were matching for any album.")
+
 
 def find_album_dirs(root_dir: str) -> list[str]:
     dirs: list[str] = []
-    for root, _, _ in os.walk(
+    for root, dnames, _ in os.walk(
         root_dir, topdown=True, onerror=None, followlinks=True
     ):
-        dpath = os.path.join(root_dir, root)
-        faces_path = os.path.join(dpath, FACES_DIR_NAME)
-        if os.path.exists(faces_path):
-            dirs.append(dpath)
+        for d in [root] + dnames:
+            dpath = os.path.join(root_dir, d)
+            faces_path = os.path.join(dpath, FACES_DIR_NAME)
+            if os.path.exists(faces_path):
+                dirs.append(dpath)
     return dirs
 
 

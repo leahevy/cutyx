@@ -34,8 +34,31 @@ def gallery_path() -> str:
     return download_images.DIR
 
 
-def test_happy_path(gallery_path: str) -> None:
+def test_happy_path_dir(gallery_path: str) -> None:
     os.mkdir("albums")
+
+    files = [
+        file for file in os.listdir(gallery_path) if not file.startswith(".")
+    ]
+    assert len(files) == 10
+
+    img1 = os.path.join(gallery_path, "Albert_Einstein_Head.jpg")
+    add_persons("albums/a", img1, training_data_prefix="albert")
+
+    process_directory(gallery_path, "albums")
+    files = [
+        file for file in os.listdir("albums/a") if not file.startswith(".")
+    ]
+    assert len(files) == 3
+
+
+def test_happy_path_single(gallery_path: str) -> None:
+    os.mkdir("albums")
+
+    files = [
+        file for file in os.listdir(gallery_path) if not file.startswith(".")
+    ]
+    assert len(files) == 10
 
     img1 = os.path.join(gallery_path, "Albert_Einstein_Head.jpg")
     add_persons("albums/a", img1, training_data_prefix="albert")
@@ -44,11 +67,5 @@ def test_happy_path(gallery_path: str) -> None:
     files = [
         file for file in os.listdir("albums/a") if not file.startswith(".")
     ]
-    assert len(files) == 1
     assert "Albert_Einstein_Head.jpg" in files
-
-    process_directory(".", "albums")
-    files = [
-        file for file in os.listdir("albums/a") if not file.startswith(".")
-    ]
-    assert len(files) == 3
+    assert len(files) == 1
