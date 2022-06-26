@@ -24,7 +24,6 @@ from typing import Any
 
 from rich import print
 
-from cutyx import cache
 from cutyx.exceptions import FacesException
 
 FACES_DIR_NAME = ".cutyx-faces.d"
@@ -105,7 +104,7 @@ def clear_cache(root_dir: str = ".", quiet: bool = False) -> None:
     if not os.path.isdir(root_dir):
         raise FacesException(f"Path ({root_dir}) is not a directory.")
     try:
-        shutil.rmtree(os.path.join(root_dir, cache.Cache.CACHE_DIR_NAME))
+        shutil.rmtree(os.path.join(root_dir, CACHE_BASE_NAME))
         if not quiet:
             print(f"[green]++ Cleared cache directory ({root_dir}) ++[/green]")
     except FileNotFoundError:
