@@ -27,6 +27,11 @@ from rich import print
 from image_gallery_organiser import cache
 from image_gallery_organiser.exceptions import FacesException
 
+FACES_DIR_NAME = ".faces.d"
+TRAINING_IMAGE_FILE_PART = ".trainingimage"
+TRAINING_IMAGE_DIR_EXT = TRAINING_IMAGE_FILE_PART + ".d"
+TRAINING_IMAGE_SRC_EXT = TRAINING_IMAGE_FILE_PART + ".src"
+
 
 def clear_cache(root_dir: str = ".", quiet: bool = False) -> None:
     root_dir = os.path.abspath(root_dir)
@@ -79,9 +84,6 @@ def process_image(
     )
 
 
-FACES_DIR_NAME = ".faces.d"
-
-
 def handle_dry_run(dry_run: bool) -> None:
     if dry_run:
         print("[blue]++ DRY RUN ++[/blue]")
@@ -111,7 +113,7 @@ def add_persons(
     with open(training_image_path, "rb") as f:
         image_hash = hashlib.md5(f.read()).hexdigest()
 
-    output_training_dir_name = image_hash + ".d"
+    output_training_dir_name = image_hash + TRAINING_IMAGE_DIR_EXT
     if training_data_prefix:
         output_training_dir_name = (
             training_data_prefix + "-" + output_training_dir_name
@@ -143,7 +145,7 @@ def add_persons(
         if not dry_run:
             with open(output_file, "w") as f:
                 f.write(serialized_as_json)
-    symlink_path = image_hash + ".src"
+    symlink_path = image_hash + TRAINING_IMAGE_SRC_EXT
     if training_data_prefix:
         symlink_path = training_data_prefix + "-" + symlink_path
     symlink_path = os.path.join(album_dir, FACES_DIR_NAME, symlink_path)
