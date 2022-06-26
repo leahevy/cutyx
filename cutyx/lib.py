@@ -59,22 +59,28 @@ def process_directory(
     only_process_files: list[str] | None = None,
 ) -> None:
     handle_dry_run(dry_run)
+
     root_dir = os.path.abspath(root_dir)
+
     if only_process_files:
         only_process_files = [os.path.abspath(f) for f in only_process_files]
         for f in only_process_files:
             check_valid_image(f)
+
     image_files_root = find_image_files(root_dir, for_albums=False)
+    album_dirs = find_album_dirs(albums_root_dir)
+
     if not quiet:
         if not image_files_root:
             print("[red]++ Found no images ++[/red]")
         else:
             print(f"[green]++ Found {len(image_files_root)} images ++[/green]")
 
-    image_files_albums = find_image_files(albums_root_dir, for_albums=True)
-
     if delete_old:
         if only_process_files:
+            image_files_albums = find_image_files(
+                albums_root_dir, for_albums=True
+            )
             for file in only_process_files:
                 basename = os.path.basename(file)
                 for file2 in image_files_albums:
@@ -82,12 +88,11 @@ def process_directory(
                     if basename == basename2:
                         if not quiet:
                             print(
-                                f"[blue]++ Remove previously classified file '{basename}' ++[/blue]"
+                                f"[blue]++ Remove previously classified file '{file}' ++[/blue]"
                             )
                         if not dry_run:
                             os.remove(file2)
         else:
-            album_dirs = find_album_dirs(albums_root_dir)
             for album_dir in album_dirs:
                 album_dir_files = [
                     file
@@ -97,10 +102,46 @@ def process_directory(
                 for album_dir_file in album_dir_files:
                     if not quiet:
                         print(
-                            f"[blue]++ Remove previously classified file '{album_dir_file}' ++[/blue]"
+                            f"[blue]++ Remove previously classified file '{album_dir_file}' ({os.path.basename(album_dir)}) ++[/blue]"
                         )
                     if not dry_run:
-                        os.remove(album_dir_file)
+                        os.remove(os.path.join(album_dir, album_dir_file))
+
+    for album_dir in album_dirs:
+        if not quiet:
+            print(
+                f"[blue]++ Process album directory '{os.path.basename(album_dir)} ++[/blue]"
+            )
+        for file in image_files_root:
+            do_process = True
+            if only_process_files:
+                if file not in only_process_files:
+                    do_process = False
+            if do_process and person_matches(file, album_dir):
+                if symlink:
+                    if not quiet:
+                        print(
+                            f"[blue]++ Symlink '{os.path.basename(file)}' -> '{os.path.basename(album_dir)}/' ++[/blue]"
+                        )
+                    if not dry_run:
+                        os.symlink(
+                            file,
+                            os.path.join(album_dir, os.path.basename(file)),
+                        )
+                else:
+                    if not quiet:
+                        print(
+                            f"[blue]++ Copy '{os.path.basename(file)}' -> '{os.path.basename(album_dir)}/' ++[/blue]"
+                        )
+                    if not dry_run:
+                        shutil.copyfile(
+                            file,
+                            os.path.join(album_dir, os.path.basename(file)),
+                        )
+                        shutil.copystat(
+                            file,
+                            os.path.join(album_dir, os.path.basename(file)),
+                        )
 
 
 def find_album_dirs(root_dir: str) -> list[str]:
@@ -280,26 +321,31 @@ def get_face_encodings(image_path: str) -> Any:
     return encodings
 
 
-def person_matches(image_path: str) -> None:
-    raise NotImplementedError("person_matches")
+def person_matches(image_path: str, album_dir: str) -> bool:
     from cutyx import faces
 
-    encodings = get_face_encodings(image_path)
-    paths = os.listdir(".")
-    for path in paths:
-        if os.path.isdir(path) and path not in [".", ".."]:
-            encoding_path = os.path.join(path, ".faces.d")
-            if os.path.exists(encoding_path):
-                facesfiles = os.listdir(encoding_path)
-                for face in facesfiles:
-                    facepath = os.path.join(encoding_path, face)
-                    with open(facepath, "r") as f:
-                        deserialized_from_json = pickle.loads(
-                            json.loads(f.read()).encode("latin-1")
+    query_encodings = get_face_encodings(image_path)
+
+    faces_dir = os.path.join(album_dir, FACES_DIR_NAME)
+    if os.path.exists(faces_dir):
+        trainingdirs = [
+            f
+            for f in os.listdir(faces_dir)
+            if f.endswith(TRAINING_IMAGE_DIR_EXT)
+        ]
+        for trainingdir in trainingdirs:
+            trainingdirpath = os.path.join(faces_dir, trainingdir)
+            encodings = os.listdir(trainingdirpath)
+            for encoding in encodings:
+                encodingpath = os.path.join(trainingdirpath, encoding)
+                with open(encodingpath, "r") as f:
+                    deserialized_from_json = pickle.loads(
+                        json.loads(f.read()).encode("latin-1")
+                    )
+                    for query_encoding in query_encodings:
+                        results = faces.compare_faces(
+                            [deserialized_from_json], query_encoding
                         )
-                        for encoding in encodings:
-                            results = faces.compare_faces(
-                                [deserialized_from_json], encoding
-                            )
-                            if True in results:
-                                print(path)
+                        if True in results:
+                            return True
+    return False

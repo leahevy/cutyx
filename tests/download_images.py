@@ -30,6 +30,7 @@ def download_image(url: str) -> None:
         filename.lower().endswith(".jpg") or filename.lower().endswith(".jpeg")
     ):
         filename += ".jpg"
+    print(f"Download '{url}'")
     urllib.request.urlretrieve(url, os.path.join(DIR, filename))
 
 
@@ -49,6 +50,9 @@ def download_images() -> None:
     )
     download_image(
         "https://upload.wikimedia.org/wikipedia/commons/5/50/Albert_Einstein_%28Nobel%29.png"
+    )
+    download_image(
+        "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
     )
 
 
