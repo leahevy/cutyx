@@ -206,6 +206,22 @@ def add_persons(
     )
 
 
+@app.callback(invoke_without_command=True)
+def main_callback(
+    ctx: typer.Context,
+    version: Optional[bool] = typer.Option(
+        False,
+        "-v",
+        "--version",
+        help="Prints the version",
+        callback=version_callback,
+        is_eager=True,
+    ),
+) -> None:
+    if ctx.invoked_subcommand is None:
+        os.execv(sys.argv[0], [sys.argv[0], "-h"])
+
+
 def main() -> None:
     app()
 
