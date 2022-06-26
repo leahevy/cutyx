@@ -58,28 +58,82 @@ def process_directory(
     quiet: bool = False,
     only_process_files: list[str] | None = None,
 ) -> None:
+    handle_dry_run(dry_run)
     root_dir = os.path.abspath(root_dir)
     if only_process_files:
         only_process_files = [os.path.abspath(f) for f in only_process_files]
         for f in only_process_files:
             check_valid_image(f)
-    image_files = find_image_files(root_dir)
+    image_files_root = find_image_files(root_dir, for_albums=False)
     if not quiet:
-        if not image_files:
+        if not image_files_root:
             print("[red]++ Found no images ++[/red]")
         else:
-            print(f"[green]++ Found {len(image_files)} images ++[/green]")
+            print(f"[green]++ Found {len(image_files_root)} images ++[/green]")
+
+    image_files_albums = find_image_files(albums_root_dir, for_albums=True)
+
+    if delete_old:
+        if only_process_files:
+            for file in only_process_files:
+                basename = os.path.basename(file)
+                for file2 in image_files_albums:
+                    basename2 = os.path.basename(file2)
+                    if basename == basename2:
+                        if not quiet:
+                            print(
+                                f"[blue]++ Remove previously classified file '{basename}' ++[/blue]"
+                            )
+                        if not dry_run:
+                            os.remove(file2)
+        else:
+            album_dirs = find_album_dirs(albums_root_dir)
+            for album_dir in album_dirs:
+                album_dir_files = [
+                    file
+                    for file in os.listdir(album_dir)
+                    if not file.startswith(".")
+                ]
+                for album_dir_file in album_dir_files:
+                    if not quiet:
+                        print(
+                            f"[blue]++ Remove previously classified file '{album_dir_file}' ++[/blue]"
+                        )
+                    if not dry_run:
+                        os.remove(album_dir_file)
 
 
-def find_image_files(root_dir: str) -> list[str]:
+def find_album_dirs(root_dir: str) -> list[str]:
+    dirs: list[str] = []
+    for root, _, _ in os.walk(
+        root_dir, topdown=True, onerror=None, followlinks=True
+    ):
+        dpath = os.path.join(root_dir, root)
+        faces_path = os.path.join(dpath, FACES_DIR_NAME)
+        if os.path.exists(faces_path):
+            dirs.append(dpath)
+    return dirs
+
+
+def find_image_files(root_dir: str, for_albums: bool = False) -> list[str]:
     images: list[str] = []
     for root, _, fnames in os.walk(
         root_dir, topdown=True, onerror=None, followlinks=True
     ):
         for fname in fnames:
-            fpath = os.path.join(root_dir, root, fname)
-            if is_valid_image(fpath):
-                images.append(fpath)
+            dpath = os.path.join(root_dir, root)
+            faces_path = os.path.join(dpath, FACES_DIR_NAME)
+            include_file = False
+            if os.path.exists(faces_path):
+                if for_albums:
+                    include_file = True
+            else:
+                if not for_albums:
+                    include_file = True
+            if include_file:
+                fpath = os.path.join(dpath, fname)
+                if is_valid_image(fpath):
+                    images.append(fpath)
     return images
 
 

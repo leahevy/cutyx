@@ -138,3 +138,6 @@ dmypy.json
 
 # Generated documentation
 /docs
+
+# Test album folders
+/test_*
