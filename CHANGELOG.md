@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+v1.2.0 (2022-06-26)
+-------------------
+- Update package metadata. [Leah Lackner]
+
+
 v1.1.0 (2022-06-26)
 -------------------
 - Fix cutyx for nested album directories. [Leah Lackner]
