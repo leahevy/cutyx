@@ -27,7 +27,7 @@ from rich import print
 from cutyx import cache
 from cutyx.exceptions import FacesException
 
-FACES_DIR_NAME = ".faces.d"
+FACES_DIR_NAME = ".cutyx-faces.d"
 TRAINING_IMAGE_FILE_PART = ".trainingimage"
 TRAINING_IMAGE_DIR_EXT = TRAINING_IMAGE_FILE_PART + ".d"
 TRAINING_IMAGE_SRC_EXT = TRAINING_IMAGE_FILE_PART + ".src"

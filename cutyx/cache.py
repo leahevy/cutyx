@@ -15,7 +15,7 @@
 
 
 class Cache:
-    CACHE_DIR_NAME: str = ".faces.cache"
+    CACHE_DIR_NAME: str = ".cutyx-faces.cache.d"
 
     def __init__(
         self, directory: str, create_non_existing: bool = True
