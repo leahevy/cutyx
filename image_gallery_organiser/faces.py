@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright (C) 2022 Leah Lackner
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,3 +12,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from typing import Any
+
+import face_recognition  # type: ignore
+
+
+def load_image_file(image_path: str) -> Any:
+    return face_recognition.load_image_file(image_path)
+
+
+def face_encodings(image: Any) -> Any:
+    return face_recognition.face_encodings(image)
+
+
+def compare_faces(
+    faces_encodings: list[Any], file_encoding_to_compare: Any
+) -> list[bool]:
+    res: list[bool] = face_recognition.compare_faces(  # type: ignore
+        faces_encodings, file_encoding_to_compare
+    )
+    if not res:
+        res = []
+    return res

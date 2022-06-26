@@ -33,12 +33,18 @@ if __name__ == "__main__":
 
     _sys.path.append(_os.path.join(_os.path.dirname(__file__), ".."))
 
-import image_gallery_organiser.lib
 from image_gallery_organiser.__version__ import __version__
 
-DEFAULT_COMMAND = "lib1"
+app = typer.Typer(
+    context_settings={"help_option_names": ["-h", "--help"]},
+    help="""
+Organises your image gallery using machine learning.
 
-app = typer.Typer(context_settings={"help_option_names": ["-h", "--help"]})
+You can check the individual --help option on the commands for more information.
+
+To run the main utility try the 'run' command.
+""",
+)
 
 
 def version_callback(value: bool) -> None:
@@ -54,47 +60,133 @@ def version_callback(value: bool) -> None:
 
 
 @app.command()
-def lib1() -> None:
-    """
-    Calls an example library function.
-    """
-    image_gallery_organiser.lib.some_lib_func()
+def clear_cache(
+    root_dir: str = typer.Option(
+        os.getcwd(), "-r", "--root-dir", help="Root dir containing the cache."
+    )
+) -> None:
+    """Clears the local cache."""
+    from image_gallery_organiser import lib
+
+    lib.clear_cache(root_dir=root_dir)
 
 
 @app.command()
-def lib2() -> None:
-    """
-    Calls another library function.
-    """
-    image_gallery_organiser.lib.other_lib_func()
-
-
-@app.callback(invoke_without_command=True)
-def main_callback(
-    ctx: typer.Context,
-    version: Optional[bool] = typer.Option(
+def run(
+    root_dir: str = typer.Option(
+        os.getcwd(),
+        "-r",
+        "--root-dir",
+        help="Root dir containing the images to be processed.",
+    ),
+    dry_run: bool = typer.Option(
+        False, "-n", "--dry-run", help="Only pretend to do anything."
+    ),
+    albums_root_dir: str = typer.Option(
+        os.getcwd(),
+        "--albums-root-dir",
+        help="Root albums dir.",
+    ),
+    delete_old: bool = typer.Option(
+        True,
+        "-d",
+        "--delete-old",
+        help="Delete previously classified images found in album directories (images outside of a trained album dir are not removed).",
+    ),
+    symlink: bool = typer.Option(
         False,
-        "-v",
-        "--version",
-        help="Prints the version",
-        callback=version_callback,
-        is_eager=True,
+        "-s",
+        "--symlink",
+        help="Do not copy the images to the album directories. Instead create a smylink.",
+    ),
+    no_cache: bool = typer.Option(
+        False, "-c", "--no-cache", help="Disables the cache."
     ),
 ) -> None:
-    """
-    Doctest test:
+    """Process images anywhere in a directory hierarchy."""
+    from image_gallery_organiser import lib
 
-    >>> print("True")
-    True
-    """
-    if ctx.invoked_subcommand is None:
-        os.execv(sys.argv[0], [sys.argv[0], DEFAULT_COMMAND] + sys.argv[1:])
+    lib.process_directory(
+        root_dir=root_dir,
+        dry_run=dry_run,
+        albums_root_dir=albums_root_dir,
+        delete_old=delete_old,
+        symlink=symlink,
+        use_cache=not no_cache,
+    )
+
+
+@app.command()
+def process_image(
+    image_to_process_path: str = typer.Argument(..., help="Image to process."),
+    dry_run: bool = typer.Option(
+        False, "-n", "--dry-run", help="Only pretend to do anything."
+    ),
+    albums_root_dir: str = typer.Option(
+        os.getcwd(),
+        "--albums-root-dir",
+        help="Root albums dir.",
+    ),
+    delete_old: bool = typer.Option(
+        True,
+        "-d",
+        "--delete-old",
+        help="Delete instances of the previously classified image found in album directories (images outside of a trained album dir are not removed).",
+    ),
+    symlink: bool = typer.Option(
+        False,
+        "-s",
+        "--symlink",
+        help="Do not copy the images to the album directories. Instead create a smylink.",
+    ),
+    no_cache: bool = typer.Option(
+        False, "-c", "--no-cache", help="Disables the cache."
+    ),
+) -> None:
+    """Process a single image."""
+    from image_gallery_organiser import lib
+
+    lib.process_image(
+        image_to_process_path,
+        albums_root_dir,
+        dry_run=dry_run,
+        delete_old=delete_old,
+        symlink=symlink,
+        use_cache=not no_cache,
+    )
+
+
+@app.command()
+def add_persons(
+    training_image_path: str = typer.Argument(
+        ..., help="Training image containing the persons."
+    ),
+    album_dir: str = typer.Argument(
+        ...,
+        help="The album directory which should be configured to match the persons in the training image.",
+    ),
+    dry_run: bool = typer.Option(
+        False, "-n", "--dry-run", help="Only pretend to do anything."
+    ),
+    training_data_prefix: Optional[str] = typer.Option(
+        None,
+        "-p",
+        "--training-prefix",
+        help="Prefix for the training sample (default: no prefix).",
+    ),
+) -> None:
+    """Add training data for persons found in a training image to the target album directory."""
+    from image_gallery_organiser import lib
+
+    lib.add_persons(
+        album_dir,
+        training_image_path,
+        dry_run=dry_run,
+        training_data_prefix=training_data_prefix,
+    )
 
 
 def main() -> None:
-    """
-    Runs the main application.
-    """
     app()
 
 
