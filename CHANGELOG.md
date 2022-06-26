@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+v1.0.2 (2022-06-26)
+-------------------
+- Enable pypi releasing. [Leah Lackner]
+
+
 v1.0.1 (2022-06-26)
 -------------------
 - Fix version option. [Leah Lackner]
