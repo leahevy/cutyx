@@ -141,3 +141,4 @@ dmypy.json
 
 # Test album folders
 /test_*
+/.cutyx-cache.d

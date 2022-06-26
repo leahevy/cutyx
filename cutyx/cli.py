@@ -60,6 +60,23 @@ def version_callback(value: bool) -> None:
 
 
 @app.command()
+def update_cache(
+    root_dir: str = typer.Option(
+        os.getcwd(),
+        "-r",
+        "--root-dir",
+        help="Root dir containing the images to be processed.",
+    )
+) -> None:
+    """Generates or updates the cache beforehand without sorting
+    the images into albums (is automatically run when using the
+    other commands and cache use is specified)."""
+    from cutyx import lib
+
+    lib.update_cache(root_dir=root_dir)
+
+
+@app.command()
 def clear_cache(
     root_dir: str = typer.Option(
         os.getcwd(), "-r", "--root-dir", help="Root dir containing the cache."
@@ -91,7 +108,8 @@ def run(
         True,
         "-d",
         "--delete-old",
-        help="Delete previously classified images found in album directories (images outside of a trained album dir are not removed).",
+        help="Delete previously classified images found in album directories "
+        "(images outside of a trained album dir are not removed).",
     ),
     symlink: bool = typer.Option(
         False,
@@ -131,7 +149,8 @@ def process_image(
         True,
         "-d",
         "--delete-old",
-        help="Delete instances of the previously classified image found in album directories (images outside of a trained album dir are not removed).",
+        help="Delete instances of the previously classified image found in album directories "
+        "(images outside of a trained album dir are not removed).",
     ),
     symlink: bool = typer.Option(
         False,
