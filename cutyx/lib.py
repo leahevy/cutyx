@@ -75,16 +75,16 @@ def update_cache(
             pathlib.Path(encodings_dir).mkdir(parents=True, exist_ok=True)
             if not quiet:
                 print(
-                    f"[green]++ Calculating image '{os.path.basename(image)}'"
-                    " face encodings ++[/green]"
+                    f"  [blue]++ Calculating image '{os.path.basename(image)}'"
+                    " face encodings ++[/blue]"
                 )
             encodings_data = get_face_encodings(image, quiet=quiet)
 
             for idx, encoding in enumerate(encodings_data):
                 if not quiet:
                     print(
-                        f"[green]++ Writing image '{os.path.basename(image)}'"
-                        f" face encoding {idx + 1}/{len(encodings_data)} ++[/green]"
+                        f"    [blue]++ Writing image '{os.path.basename(image)}'"
+                        f" face encoding {idx + 1}/{len(encodings_data)} ++[/blue]"
                     )
                 serialized_as_json = json.dumps(
                     pickle.dumps(encoding).decode("latin-1")
@@ -144,6 +144,8 @@ def process_directory(
             print(f"[green]++ Found {len(image_files_root)} images ++[/green]")
 
     if delete_old:
+        if not quiet:
+            print("[green]++ Check for old files to remove ++[/green]")
         if only_process_files:
             image_files_albums = find_image_files(
                 albums_root_dir, for_albums=True
@@ -155,7 +157,7 @@ def process_directory(
                     if basename == basename2:
                         if not quiet:
                             print(
-                                f"[blue]++ Remove previously classified image '{file}' ++[/blue]"
+                                f"  [blue]++ Remove previously classified image '{file}' ++[/blue]"
                             )
                         if not dry_run:
                             os.remove(file2)
@@ -169,7 +171,7 @@ def process_directory(
                 for album_dir_file in album_dir_files:
                     if not quiet:
                         print(
-                            "[blue]++ Remove previously classified image "
+                            "  [blue]++ Remove previously classified image "
                             f"'{album_dir_file}' ({os.path.basename(album_dir)}) ++[/blue]"
                         )
                     if not dry_run:
@@ -178,7 +180,7 @@ def process_directory(
     for album_dir in album_dirs:
         if not quiet:
             print(
-                f"[blue]++ Process album directory '{os.path.basename(album_dir)} ++[/blue]"
+                f"[green]++ Process album directory '{os.path.basename(album_dir)} ++[/green]"
             )
         for file in image_files_root:
             do_process = True
@@ -194,7 +196,7 @@ def process_directory(
                 if symlink:
                     if not quiet:
                         print(
-                            f"[blue]++ Symlink '{os.path.basename(file)}' -> "
+                            f"  [blue]++ Symlink '{os.path.basename(file)}' -> "
                             f"'{os.path.basename(album_dir)}/' ++[/blue]"
                         )
                     if not dry_run:
@@ -205,7 +207,7 @@ def process_directory(
                 else:
                     if not quiet:
                         print(
-                            f"[blue]++ Copy '{os.path.basename(file)}' -> "
+                            f"  [blue]++ Copy '{os.path.basename(file)}' -> "
                             f"'{os.path.basename(album_dir)}/' ++[/blue]"
                         )
                     if not dry_run:
@@ -278,7 +280,7 @@ def process_image(
 
 def handle_dry_run(dry_run: bool) -> None:
     if dry_run:
-        print("[blue]++ DRY RUN ++[/blue]")
+        print("[red]++ DRY RUN ++[/red]")
 
 
 def add_persons(
@@ -316,7 +318,7 @@ def add_persons(
     )
     if not quiet:
         print(
-            f"[green]++ Create training data directory '{output_dir}' ++[/green]"
+            f"  [blue]++ Create training data directory '{output_dir}' ++[/blue]"
         )
     try:
         shutil.rmtree(output_dir)
@@ -327,7 +329,7 @@ def add_persons(
     for idx, encoding in enumerate(encodings):
         if not quiet:
             print(
-                f"[green]++ Writing face encoding {idx + 1}/{len(encodings)} ++[/green]"
+                f"  [blue]++ Writing face encoding {idx + 1}/{len(encodings)} ++[/blue]"
             )
         serialized_as_json = json.dumps(
             pickle.dumps(encoding).decode("latin-1")
@@ -342,7 +344,7 @@ def add_persons(
         symlink_path = training_data_prefix + "-" + symlink_path
     symlink_path = os.path.join(album_dir, FACES_DIR_NAME, symlink_path)
     if not quiet:
-        print("[green]++ Create symlink to training image ++[/green]")
+        print("  [blue]++ Create symlink to training image ++[/blue]")
     if not dry_run:
         try:
             os.remove(symlink_path)
