@@ -1,6 +1,6 @@
 # 👥 Contributing
 
-Want to add a contribution to **template-python-project**? Feel free to send a [pull request](https://github.com/leahevy/template-python-project/compare).
+Want to add a contribution to **image-gallery-organiser**? Feel free to send a [pull request](https://github.com/leahevy/image-gallery-organiser/compare).
 
 ---
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-#
 # Copyright (C) 2022 Leah Lackner
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,16 +13,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from types import ModuleType
+import semantic_version  # type: ignore
 
+__version__ = "0.0.1"
 
-def test_template_python_project_lib_some(
-    template_python_project: ModuleType,
-) -> None:
-    template_python_project.lib.some_lib_func()
+_v = semantic_version.Version(__version__)
 
+__major_version__ = _v.major
+__minor_version__ = _v.minor
+__patch_version__ = _v.patch
 
-def test_template_python_project_lib_other(
-    template_python_project: ModuleType,
-) -> None:
-    template_python_project.lib.other_lib_func()
+__all__ = [
+    "__version__",
+    "__major_version__",
+    "__minor_version__",
+    "__patch_version__",
+]

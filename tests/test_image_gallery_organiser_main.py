@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+#
 # Copyright (C) 2022 Leah Lackner
 #
 # This program is free software: you can redistribute it and/or modify
@@ -13,19 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import semantic_version  # type: ignore
+from types import ModuleType
 
-__version__ = "0.40.0"
 
-_v = semantic_version.Version(__version__)
+def test_image_gallery_organiser_lib_some(
+    image_gallery_organiser: ModuleType,
+) -> None:
+    image_gallery_organiser.lib.some_lib_func()
 
-__major_version__ = _v.major
-__minor_version__ = _v.minor
-__patch_version__ = _v.patch
 
-__all__ = [
-    "__version__",
-    "__major_version__",
-    "__minor_version__",
-    "__patch_version__",
-]
+def test_image_gallery_organiser_lib_other(
+    image_gallery_organiser: ModuleType,
+) -> None:
+    image_gallery_organiser.lib.other_lib_func()

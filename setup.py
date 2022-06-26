@@ -32,17 +32,17 @@ def read_requirements(file: str) -> list[str]:
 
 
 setup_info = dict(
-    name="template-python-project",
-    version="0.40.0",
+    name="image-gallery-organiser",
+    version="0.0.1",
     author="Leah Lackner",
     author_email="leah.lackner+github@gmail.com",
-    url="https://github.com/leahevy/template-python-project",
+    url="https://github.com/leahevy/image-gallery-organiser",
     project_urls={
         "Documentation": "https://leahevy.github.io/"
-        "template-python-project",
-        "Source": "https://github.com/leahevy/" "template-python-project",
+        "image-gallery-organiser",
+        "Source": "https://github.com/leahevy/" "image-gallery-organiser",
         "Tracker": "https://github.com/leahevy/"
-        "template-python-project"
+        "image-gallery-organiser"
         "/issues",
     },
     description="A Python project template.",
@@ -64,7 +64,7 @@ setup_info = dict(
     zip_safe=True,
     entry_points={
         "console_scripts": [
-            "template-python-project=template_python_project.cli:main"
+            "image-gallery-organiser=image_gallery_organiser.cli:main"
         ],
     },
     package_dir={"": "."},

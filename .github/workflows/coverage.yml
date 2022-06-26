@@ -35,7 +35,7 @@ jobs:
         git rm -r --cached .
         git clean -fdx
         cp /tmp/.coverage ./
-        git checkout origin/master -- template_python_project
+        git checkout origin/master -- image_gallery_organiser
         git checkout origin/master -- tests
         git rm -r --cached .
     - name: Coverage Badge

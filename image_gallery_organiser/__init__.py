@@ -17,8 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 .. include:: ../README.md
 """
-from template_python_project import examples, lib
-from template_python_project.__version__ import (
+from image_gallery_organiser import examples, lib
+from image_gallery_organiser.__version__ import (
     __major_version__,
     __minor_version__,
     __patch_version__,

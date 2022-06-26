@@ -20,17 +20,17 @@ from typing import Any, Generator
 
 import pytest
 
-import template_python_project as _template_python_project
+import image_gallery_organiser as _image_gallery_organiser
 
 
 @pytest.fixture(autouse=True)
 def add_imports(doctest_namespace: dict[str, Any]) -> None:
-    doctest_namespace["tp"] = _template_python_project
+    doctest_namespace["img"] = _image_gallery_organiser
 
 
 @pytest.fixture()
-def template_python_project() -> Any:
-    return _template_python_project
+def image_gallery_organiser() -> Any:
+    return _image_gallery_organiser
 
 
 @pytest.fixture(autouse=True)

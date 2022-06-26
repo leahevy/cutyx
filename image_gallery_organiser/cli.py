@@ -33,8 +33,8 @@ if __name__ == "__main__":
 
     _sys.path.append(_os.path.join(_os.path.dirname(__file__), ".."))
 
-import template_python_project.lib
-from template_python_project.__version__ import __version__
+import image_gallery_organiser.lib
+from image_gallery_organiser.__version__ import __version__
 
 DEFAULT_COMMAND = "lib1"
 
@@ -58,7 +58,7 @@ def lib1() -> None:
     """
     Calls an example library function.
     """
-    template_python_project.lib.some_lib_func()
+    image_gallery_organiser.lib.some_lib_func()
 
 
 @app.command()
@@ -66,7 +66,7 @@ def lib2() -> None:
     """
     Calls another library function.
     """
-    template_python_project.lib.other_lib_func()
+    image_gallery_organiser.lib.other_lib_func()
 
 
 @app.callback(invoke_without_command=True)
