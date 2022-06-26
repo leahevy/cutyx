@@ -24,6 +24,7 @@ from typing import Any
 from rich import print
 
 from image_gallery_organiser import cache
+from image_gallery_organiser.exceptions import FacesException
 
 
 def get_face_encodings(image_path: str) -> Any:
@@ -45,10 +46,15 @@ def get_face_encodings(image_path: str) -> Any:
 
 
 def clear_cache(root_dir: str = ".") -> None:
+    if not os.path.exists(root_dir):
+        raise FacesException(f"Root directory ({root_dir}) does not exist.")
+    if not os.path.isdir(root_dir):
+        raise FacesException(f"Path ({root_dir}) is not a directory.")
     try:
-        shutil.rmtree(cache.Cache.CACHE_DIR_NAME)
+        shutil.rmtree(os.path.join(root_dir, cache.Cache.CACHE_DIR_NAME))
+        print(f"[green]++ Cleared cache directory ({root_dir}) ++[/green]")
     except FileNotFoundError:
-        pass
+        print(f"[red]++ No previous cache found ({root_dir}) ++[/red]")
 
 
 def process_directory(
