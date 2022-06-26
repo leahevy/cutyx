@@ -25,7 +25,7 @@ from typing import Any
 from rich import print
 
 from cutyx.exceptions import FacesException
-from cutyx.utils import mksymlink
+from cutyx.utils import copyfile, mksymlink
 
 FACES_DIR_NAME = ".cutyx-faces.d"
 CACHE_BASE_NAME = ".cutyx-cache.d"
@@ -359,11 +359,7 @@ def handle_process_files(
                             f"'{os.path.basename(album_dir)}/' ++[/blue]"
                         )
                     if not dry_run:
-                        shutil.copyfile(
-                            file,
-                            os.path.join(album_dir, os.path.basename(file)),
-                        )
-                        shutil.copystat(
+                        copyfile(
                             file,
                             os.path.join(album_dir, os.path.basename(file)),
                         )

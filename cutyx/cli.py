@@ -105,11 +105,11 @@ def run(
         "--albums-root-dir",
         help="Root albums dir.",
     ),
-    delete_old: bool = typer.Option(
-        True,
+    no_delete_old: bool = typer.Option(
+        False,
         "-d",
-        "--delete-old",
-        help="Delete previously classified images found in album directories "
+        "--no-delete-old",
+        help="Do not delete previously classified images found in album directories "
         "(images outside of a trained album dir are not removed).",
     ),
     symlink: bool = typer.Option(
@@ -129,7 +129,7 @@ def run(
         root_dir=root_dir,
         dry_run=dry_run,
         albums_root_dir=albums_root_dir,
-        delete_old=delete_old,
+        delete_old=not no_delete_old,
         symlink=symlink,
         use_cache=not no_cache,
     )
@@ -146,11 +146,11 @@ def process_image(
         "--albums-root-dir",
         help="Root albums dir.",
     ),
-    delete_old: bool = typer.Option(
-        True,
+    no_delete_old: bool = typer.Option(
+        False,
         "-d",
-        "--delete-old",
-        help="Delete instances of the previously classified image found in album directories "
+        "--no-delete-old",
+        help="Do not delete instances of the previously classified image found in album directories "
         "(images outside of a trained album dir are not removed).",
     ),
     symlink: bool = typer.Option(
@@ -170,7 +170,7 @@ def process_image(
         image_to_process_path,
         albums_root_dir,
         dry_run=dry_run,
-        delete_old=delete_old,
+        delete_old=not no_delete_old,
         symlink=symlink,
         use_cache=not no_cache,
     )

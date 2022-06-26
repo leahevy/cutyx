@@ -17,6 +17,28 @@
 
 import os
 import os.path
+import shutil
+
+
+def copyfile(src: str, dest: str) -> None:
+    """Copies a file.
+
+    :param src: The source file.
+
+    :param dest: The target file.
+    """
+    try:
+        os.remove(dest)
+    except FileNotFoundError:
+        pass
+    shutil.copyfile(
+        src,
+        dest,
+    )
+    shutil.copystat(
+        src,
+        dest,
+    )
 
 
 def mksymlink(target: str, linkpath: str) -> None:
@@ -26,4 +48,8 @@ def mksymlink(target: str, linkpath: str) -> None:
 
     :param linkpath: The path of the generated link.
     """
+    try:
+        os.remove(linkpath)
+    except FileNotFoundError:
+        pass
     os.symlink(os.path.relpath(target, os.path.dirname(linkpath)), linkpath)
