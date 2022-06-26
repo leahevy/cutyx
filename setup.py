@@ -42,14 +42,14 @@ setup_info = dict(
         "Source": "https://github.com/leahevy/" "cutyx",
         "Tracker": "https://github.com/leahevy/" "cutyx" "/issues",
     },
-    description="A Python project template.",
+    description="Tool to organise your image gallery using machine learning.",
     long_description=read_file("README.md"),
     long_description_content_type="text/markdown",
     platforms="Linux, Mac OSX",
     license="GPLv3",
     include_package_data=True,
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU General"
