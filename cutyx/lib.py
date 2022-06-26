@@ -84,7 +84,7 @@ def update_cache(
                 if not quiet:
                     print(
                         f"[green]++ Writing image '{os.path.basename(image)}'"
-                        " face encoding {idx + 1}/{len(encodings_data)} ++[/green]"
+                        f" face encoding {idx + 1}/{len(encodings_data)} ++[/green]"
                     )
                 serialized_as_json = json.dumps(
                     pickle.dumps(encoding).decode("latin-1")
