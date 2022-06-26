@@ -1,5 +1,5 @@
 <div align="center">
-<a href="https://github.com/leahevy/image-gallery-organiser"><img src="https://raw.githubusercontent.com/leahevy/image-gallery-organiser/master/assets/image-gallery-organiser.png" width="350px" alt="image-gallery-organiser"/></a>
+<a href="https://github.com/leahevy/cutyx"><img src="https://raw.githubusercontent.com/leahevy/image-gallery-organiser/master/assets/cutyx.png" width="350px" alt="image-gallery-organiser"/></a>
 </div>
 <br/>
 
@@ -8,13 +8,13 @@
 </p>
 
 <p align="center">
-<a href="https://github.com/leahevy/image-gallery-organiser/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="This project is maintained"/></a>
-<a href="https://github.com/leahevy/image-gallery-organiser/actions/workflows/build.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/build.yml/badge.svg" alt="Build"/></a>
-<a href="https://github.com/leahevy/image-gallery-organiser/actions/workflows/tests.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/tests.yml/badge.svg" alt="Tests"/></a>
-<a href="https://github.com/leahevy/image-gallery-organiser/actions/workflows/coverage.yml"><img src="https://raw.githubusercontent.com/leahevy/image-gallery-organiser/coverage/coverage.svg" alt="Coverage"/></a>
-<a href="https://github.com/leahevy/image-gallery-organiser/actions/workflows/style.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/style.yml/badge.svg" alt="Coding style"/></a>
-<a href="https://github.com/leahevy/image-gallery-organiser/actions/workflows/format.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/format.yml/badge.svg" alt="Formatting checks"/></a>
-<a href="https://github.com/leahevy/image-gallery-organiser/actions/workflows/typechecks.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/typechecks.yml/badge.svg" alt="Typechecks"/></a>
+<a href="https://github.com/leahevy/cutyx/graphs/commit-activity"><img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" alt="This project is maintained"/></a>
+<a href="https://github.com/leahevy/cutyx/actions/workflows/build.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/build.yml/badge.svg" alt="Build"/></a>
+<a href="https://github.com/leahevy/cutyx/actions/workflows/tests.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/tests.yml/badge.svg" alt="Tests"/></a>
+<a href="https://github.com/leahevy/cutyx/actions/workflows/coverage.yml"><img src="https://raw.githubusercontent.com/leahevy/image-gallery-organiser/coverage/coverage.svg" alt="Coverage"/></a>
+<a href="https://github.com/leahevy/cutyx/actions/workflows/style.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/style.yml/badge.svg" alt="Coding style"/></a>
+<a href="https://github.com/leahevy/cutyx/actions/workflows/format.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/format.yml/badge.svg" alt="Formatting checks"/></a>
+<a href="https://github.com/leahevy/cutyx/actions/workflows/typechecks.yml"><img src="https://github.com/leahevy/image-gallery-organiser/actions/workflows/typechecks.yml/badge.svg" alt="Typechecks"/></a>
 <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3"/></a>
 <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg" alt="Made with Python"/></a>
 <a href="https://www.linux.org/"><img src="https://img.shields.io/badge/OS-Linux-green" alt="Running on Linux"/></a>
@@ -25,23 +25,21 @@
   
 ---
 
-## 💫 [Image Gallery Organiser](https://github.com/leahevy/image-gallery-organiser)
+## 💫 [CutyX](https://github.com/leahevy/cutyx)
 
-A Python project template.
+Tool to organise your image gallery using machine learning technologies.
 
-Some description comes here.
-
-[The source for this project is available here.](https://github.com/leahevy/image-gallery-organiser)
+[The source for this project is available here.](https://github.com/leahevy/cutyx)
 
 ---
 
 ## 💿 Installation
 
-To install it with pip run: `pip install image-gallery-organiser`.
+To install it with pip run: `pip install cutyx`.
 
-To install this package locally for development, clone it first using `git clone https://github.com/leahevy/image-gallery-organiser` and run: `pip install -e .[dev]`.
+To install this package locally for development, clone it first using `git clone https://github.com/leahevy/cutyx` and run: `pip install -e .[dev]`.
 
-For installation of the latest version you can install it with pip directly from *GitHub* with the command: `pip install git+https://github.com/leahevy/image-gallery-organiser.git`.
+For installation of the latest version you can install it with pip directly from *GitHub* with the command: `pip install git+https://github.com/leahevy/cutyx.git`.
 
 ---
 
@@ -49,9 +47,9 @@ For installation of the latest version you can install it with pip directly from
 
 For shell completion run one of the appropriate commands:
 
-- `image-gallery-organiser --install-completion=bash`
-- `image-gallery-organiser --install-completion=zsh`
-- `image-gallery-organiser --install-completion=fish`
+- `cutyx --install-completion=bash`
+- `cutyx --install-completion=zsh`
+- `cutyx --install-completion=fish`
 
 ---
 
@@ -70,15 +68,15 @@ The following commands are available:
 
 ## 📖 Documentation
 
-The documentation is available at <https://leahevy.github.io/image-gallery-organiser>.
+The documentation is available at <https://leahevy.github.io/cutyx>.
 
 ---
 
 ## 👥 Contributing
 
-Want to add a contribution to **image-gallery-organiser**? Feel free to send a [pull request](https://github.com/leahevy/image-gallery-organiser/compare).
+Want to add a contribution to **CutyX**? Feel free to send a [pull request](https://github.com/leahevy/image-gallery-organiser/compare).
 
-See also [here](https://github.com/leahevy/image-gallery-organiser/blob/master/CONTRIBUTING.md).
+See also [here](https://github.com/leahevy/cutyx/blob/master/CONTRIBUTING.md).
 
 ---
 

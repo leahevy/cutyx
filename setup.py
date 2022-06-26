@@ -32,18 +32,15 @@ def read_requirements(file: str) -> list[str]:
 
 
 setup_info = dict(
-    name="image-gallery-organiser",
+    name="cutyx",
     version="0.0.1",
     author="Leah Lackner",
     author_email="leah.lackner+github@gmail.com",
-    url="https://github.com/leahevy/image-gallery-organiser",
+    url="https://github.com/leahevy/cutyx",
     project_urls={
-        "Documentation": "https://leahevy.github.io/"
-        "image-gallery-organiser",
-        "Source": "https://github.com/leahevy/" "image-gallery-organiser",
-        "Tracker": "https://github.com/leahevy/"
-        "image-gallery-organiser"
-        "/issues",
+        "Documentation": "https://leahevy.github.io/" "cutyx",
+        "Source": "https://github.com/leahevy/" "cutyx",
+        "Tracker": "https://github.com/leahevy/" "cutyx" "/issues",
     },
     description="A Python project template.",
     long_description=read_file("README.md"),
@@ -63,9 +60,7 @@ setup_info = dict(
     ],
     zip_safe=True,
     entry_points={
-        "console_scripts": [
-            "image-gallery-organiser=image_gallery_organiser.cli:main"
-        ],
+        "console_scripts": ["cutyx=cutyx.cli:main"],
     },
     package_dir={"": "."},
     packages=find_packages(where="."),

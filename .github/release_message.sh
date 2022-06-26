@@ -7,9 +7,9 @@ echo "## Version ${current_tag}"
 echo
 echo "### Project links"
 echo
-echo "- Source code: <https://github.com/leahevy/image-gallery-organiser/tree/$current_tag>"
-echo "- Release: <https://github.com/leahevy/image-gallery-organiser/releases/tag/$current_tag>"
-echo "- Download: <https://github.com/leahevy/image-gallery-organiser/archive/refs/tags/$current_tag.zip>"
+echo "- Source code: <https://github.com/leahevy/cutyx/tree/$current_tag>"
+echo "- Release: <https://github.com/leahevy/cutyx/releases/tag/$current_tag>"
+echo "- Download: <https://github.com/leahevy/cutyx/archive/refs/tags/$current_tag.zip>"
 echo
 echo "### Changelog"
 echo

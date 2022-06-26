@@ -24,8 +24,8 @@ from typing import Any
 
 from rich import print
 
-from image_gallery_organiser import cache
-from image_gallery_organiser.exceptions import FacesException
+from cutyx import cache
+from cutyx.exceptions import FacesException
 
 FACES_DIR_NAME = ".faces.d"
 TRAINING_IMAGE_FILE_PART = ".trainingimage"
@@ -58,7 +58,11 @@ def process_directory(
     quiet: bool = False,
     only_process_files: list[str] | None = None,
 ) -> None:
-    raise NotImplementedError("process_directory")
+    root_dir = os.path.abspath(root_dir)
+    if only_process_files:
+        only_process_files = [os.path.abspath(f) for f in only_process_files]
+        for f in only_process_files:
+            check_valid_image(f)
 
 
 def process_image(
@@ -174,7 +178,7 @@ def check_valid_image(image_path: str) -> None:
 
 
 def get_face_encodings(image_path: str) -> Any:
-    from image_gallery_organiser import faces
+    from cutyx import faces
 
     if not os.path.exists(image_path):
         raise ValueError(f"Image '{image_path}' does not exist.")
@@ -193,7 +197,7 @@ def get_face_encodings(image_path: str) -> Any:
 
 def person_matches(image_path: str) -> None:
     raise NotImplementedError("person_matches")
-    from image_gallery_organiser import faces
+    from cutyx import faces
 
     encodings = get_face_encodings(image_path)
     paths = os.listdir(".")

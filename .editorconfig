@@ -11,7 +11,7 @@ end_of_line = lf
 profile = black
 indent_style = space
 max_line_length = 79
-src_paths=image_gallery_organiser,tests,setup.py
+src_paths=cutyx,tests,setup.py
 
 [*.{yml,yaml}]
 indent_style = space

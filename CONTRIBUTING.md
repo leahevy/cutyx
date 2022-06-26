@@ -1,6 +1,6 @@
 # 👥 Contributing
 
-Want to add a contribution to **image-gallery-organiser**? Feel free to send a [pull request](https://github.com/leahevy/image-gallery-organiser/compare).
+Want to add a contribution to **cutyx**? Feel free to send a [pull request](https://github.com/leahevy/cutyx/compare).
 
 ---
 

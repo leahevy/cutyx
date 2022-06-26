@@ -20,17 +20,17 @@ from typing import Any, Generator
 
 import pytest
 
-import image_gallery_organiser as _image_gallery_organiser
+import cutyx as _cutyx
 
 
 @pytest.fixture(autouse=True)
 def add_imports(doctest_namespace: dict[str, Any]) -> None:
-    doctest_namespace["img"] = _image_gallery_organiser
+    doctest_namespace["img"] = _cutyx
 
 
 @pytest.fixture()
-def image_gallery_organiser() -> Any:
-    return _image_gallery_organiser
+def cutyx() -> Any:
+    return _cutyx
 
 
 @pytest.fixture(autouse=True)

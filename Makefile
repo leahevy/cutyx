@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-PROJECT_NAME = image-gallery-organiser
+PROJECT_NAME = cutyx
 PACKAGE_NAME := $(subst -,_,$(PROJECT_NAME))
 
 FILES = ./$(PACKAGE_NAME) ./tests ./setup.py

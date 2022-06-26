@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     _sys.path.append(_os.path.join(_os.path.dirname(__file__), ".."))
 
-from image_gallery_organiser.__version__ import __version__
+from cutyx.__version__ import __version__
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -66,7 +66,7 @@ def clear_cache(
     )
 ) -> None:
     """Clears the local cache."""
-    from image_gallery_organiser import lib
+    from cutyx import lib
 
     lib.clear_cache(root_dir=root_dir)
 
@@ -104,7 +104,7 @@ def run(
     ),
 ) -> None:
     """Process images anywhere in a directory hierarchy."""
-    from image_gallery_organiser import lib
+    from cutyx import lib
 
     lib.process_directory(
         root_dir=root_dir,
@@ -144,7 +144,7 @@ def process_image(
     ),
 ) -> None:
     """Process a single image."""
-    from image_gallery_organiser import lib
+    from cutyx import lib
 
     lib.process_image(
         image_to_process_path,
@@ -176,7 +176,7 @@ def add_persons(
     ),
 ) -> None:
     """Add training data for persons found in a training image to the target album directory."""
-    from image_gallery_organiser import lib
+    from cutyx import lib
 
     lib.add_persons(
         album_dir,
