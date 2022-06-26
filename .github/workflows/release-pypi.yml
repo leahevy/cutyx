@@ -4,12 +4,8 @@ name: Release on Pypi
 # To enable, exchange the commented blocks.
 on:
   push:
-# Disable the branches-ignore block:
-    branches-ignore:
-      - '**'
-# Enable the tags block:
-#    tags:
-#      - '*'
+    tags:
+      - '*'
   workflow_dispatch: {}
 
 jobs:
