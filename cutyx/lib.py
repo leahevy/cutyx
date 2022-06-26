@@ -187,13 +187,14 @@ def handle_delete_old(
         image_files_albums = find_image_files(albums_root_dir, for_albums=True)
         for image_album_file in image_files_albums:
             if is_included(image_album_file, only_process_files):
-                if not quiet:
-                    print(
-                        "  [blue]++ Remove previously classified image "
-                        f"'{os.path.basename(image_album_file)}' ++[/blue]"
-                    )
-                if not dry_run:
-                    os.remove(image_album_file)
+                if not os.path.isdir(image_album_file):
+                    if not quiet:
+                        print(
+                            "  [blue]++ Remove previously classified image "
+                            f"'{os.path.basename(image_album_file)}' ++[/blue]"
+                        )
+                    if not dry_run:
+                        os.remove(image_album_file)
     else:
         # Remove all non-hidden files in a found album directory
         for album_dir in album_dirs:
@@ -203,13 +204,15 @@ def handle_delete_old(
                 if not file.startswith(".")
             ]
             for album_dir_file in album_dir_files:
-                if not quiet:
-                    print(
-                        "  [blue]++ Remove previously classified image "
-                        f"'{album_dir_file}' ({os.path.basename(album_dir)}) ++[/blue]"
-                    )
-                if not dry_run:
-                    os.remove(os.path.join(album_dir, album_dir_file))
+                file_to_remove = os.path.join(album_dir, album_dir_file)
+                if not os.path.isdir(file_to_remove):
+                    if not quiet:
+                        print(
+                            "  [blue]++ Remove previously classified image "
+                            f"'{album_dir_file}' ({os.path.basename(album_dir)}) ++[/blue]"
+                        )
+                    if not dry_run:
+                        os.remove(file_to_remove)
 
 
 def process_directory(
