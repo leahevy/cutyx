@@ -37,7 +37,7 @@ TRAINING_IMAGE_SRC_EXT = TRAINING_IMAGE_FILE_PART + ".src"
 
 def is_included(
     path: str,
-    only_process_files: list[str] | None = None,
+    only_process_files: set[str] | None = None,
 ) -> bool:
     if only_process_files:
         basename = os.path.basename(path)
@@ -52,7 +52,7 @@ def is_included(
 
 def update_cache(
     root_dir: str = ".",
-    only_process_files: list[str] | None = None,
+    only_process_files: set[str] | None = None,
     quiet: bool = False,
 ) -> None:
     root_dir = os.path.abspath(root_dir)
@@ -118,6 +118,43 @@ def clear_cache(root_dir: str = ".", quiet: bool = False) -> None:
             print(f"[red]++ No previous cache found ({root_dir}) ++[/red]")
 
 
+def handle_delete_old(
+    albums_root_dir: str,
+    only_process_files: set[str] | None = None,
+    quiet: bool = False,
+    dry_run: bool = False,
+) -> None:
+    if not quiet:
+        print("[green]++ Check for old files to remove ++[/green]")
+    album_dirs = find_album_dirs(albums_root_dir)
+    if only_process_files:
+        image_files_albums = find_image_files(albums_root_dir, for_albums=True)
+        for image_album_file in image_files_albums:
+            if is_included(image_album_file, only_process_files):
+                if not quiet:
+                    print(
+                        "  [blue]++ Remove previously classified image "
+                        f"'{os.path.basename(image_album_file)}' ++[/blue]"
+                    )
+                if not dry_run:
+                    os.remove(image_album_file)
+    else:
+        for album_dir in album_dirs:
+            album_dir_files = [
+                file
+                for file in os.listdir(album_dir)
+                if not file.startswith(".")
+            ]
+            for album_dir_file in album_dir_files:
+                if not quiet:
+                    print(
+                        "  [blue]++ Remove previously classified image "
+                        f"'{album_dir_file}' ({os.path.basename(album_dir)}) ++[/blue]"
+                    )
+                if not dry_run:
+                    os.remove(os.path.join(album_dir, album_dir_file))
+
+
 def process_directory(
     root_dir: str = ".",
     albums_root_dir: str = ".",
@@ -126,12 +163,12 @@ def process_directory(
     symlink: bool = True,
     use_cache: bool = True,
     quiet: bool = False,
-    only_process_files: list[str] | None = None,
+    only_process_files: set[str] | None = None,
 ) -> None:
     handle_dry_run(dry_run)
 
     if only_process_files:
-        only_process_files = [os.path.abspath(f) for f in only_process_files]
+        only_process_files = {os.path.abspath(f) for f in only_process_files}
         for f in only_process_files:
             check_valid_image(f)
 
@@ -140,48 +177,43 @@ def process_directory(
 
     root_dir = os.path.abspath(root_dir)
 
-    image_files_root = find_image_files(root_dir, for_albums=False)
-    album_dirs = find_album_dirs(albums_root_dir)
+    if delete_old:
+        handle_delete_old(
+            albums_root_dir,
+            only_process_files=only_process_files,
+            quiet=quiet,
+            dry_run=dry_run,
+        )
 
+    handle_process_files(
+        root_dir,
+        albums_root_dir,
+        only_process_files=only_process_files,
+        quiet=quiet,
+        use_cache=use_cache,
+        symlink=symlink,
+        dry_run=dry_run,
+    )
+
+
+def handle_process_files(
+    root_dir: str,
+    albums_root_dir: str,
+    only_process_files: set[str] | None = None,
+    quiet: bool = False,
+    use_cache: bool = False,
+    symlink: bool = False,
+    dry_run: bool = False,
+) -> None:
+    num_processed = 0
+    album_dirs = find_album_dirs(albums_root_dir)
+    image_files_root = find_image_files(root_dir, for_albums=False)
     if not quiet:
         if not image_files_root:
             print("[red]++ Found no images ++[/red]")
         else:
             print(f"[green]++ Found {len(image_files_root)} images ++[/green]")
 
-    if delete_old:
-        if not quiet:
-            print("[green]++ Check for old files to remove ++[/green]")
-        if only_process_files:
-            image_files_albums = find_image_files(
-                albums_root_dir, for_albums=True
-            )
-            for image_album_file in image_files_albums:
-                if is_included(image_album_file, only_process_files):
-                    if not quiet:
-                        print(
-                            "  [blue]++ Remove previously classified image "
-                            f"'{os.path.basename(image_album_file)}' ++[/blue]"
-                        )
-                    if not dry_run:
-                        os.remove(image_album_file)
-        else:
-            for album_dir in album_dirs:
-                album_dir_files = [
-                    file
-                    for file in os.listdir(album_dir)
-                    if not file.startswith(".")
-                ]
-                for album_dir_file in album_dir_files:
-                    if not quiet:
-                        print(
-                            "  [blue]++ Remove previously classified image "
-                            f"'{album_dir_file}' ({os.path.basename(album_dir)}) ++[/blue]"
-                        )
-                    if not dry_run:
-                        os.remove(os.path.join(album_dir, album_dir_file))
-
-    num_processed = 0
     for album_dir in album_dirs:
         if not quiet:
             print(
@@ -226,7 +258,7 @@ def process_directory(
                             os.path.join(album_dir, os.path.basename(file)),
                         )
 
-    if num_processed == 0:
+    if num_processed == 0 and image_files_root and album_dirs:
         raise FacesException("No images were matching for any album.")
 
 
@@ -284,7 +316,7 @@ def process_image(
         symlink=symlink,
         use_cache=use_cache,
         quiet=quiet,
-        only_process_files=[image_to_process_path],
+        only_process_files={image_to_process_path},
     )
 
 
