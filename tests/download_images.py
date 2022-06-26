@@ -26,6 +26,12 @@ def download_image(url: str) -> None:
     if not os.path.exists(DIR):
         raise ValueError("Image directory does not exist")
     filename = url.rsplit("/", 1)[1]
+    if ":" in filename:
+        filename = filename.rsplit(":", 1)[1]
+    if "?" in filename:
+        filename = filename.rsplit("?", 1)[1]
+    if "=" in filename:
+        filename = filename.rsplit("=", 1)[1]
     if not (
         filename.lower().endswith(".jpg") or filename.lower().endswith(".jpeg")
     ):
@@ -53,6 +59,24 @@ def download_images() -> None:
     )
     download_image(
         "https://upload.wikimedia.org/wikipedia/commons/3/3a/Cat03.jpg"
+    )
+    download_image(
+        "https://upload.wikimedia.org/wikipedia/commons/e/e8/Lc3_2018_%28263682303%29_%28cropped%29.jpeg"
+    )
+    download_image(
+        "https://upload.wikimedia.org/wikipedia/commons/2/28/Richard_Stallman_at_LibrePlanet_2019.jpg"
+    )
+    download_image(
+        "https://upload.wikimedia.org/wikipedia/commons/e/e2/Guido-portrait-2014-drc.jpg"
+    )
+    download_image(
+        "https://static.wikia.nocookie.net/elfen-lied/images/6/64/Kaede_Manga.jpg/revision/latest?cb=20180922143710"
+    )
+    download_image(
+        "https://upload.wikimedia.org/wikipedia/commons/8/8c/Self-portrait_at_13_by_Albrecht_D%C3%BCrer.jpg"
+    )
+    download_image(
+        "https://upload.wikimedia.org/wikipedia/commons/c/c5/Edward_Law._Pencil_drawing_by_H._M._Raeburn%2C_1909._Wellcome_V0003431.jpg"
     )
 
 
