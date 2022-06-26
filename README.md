@@ -31,6 +31,15 @@ Tool to organise your image gallery using machine learning.
 
 To get an overview how **CutyX** can be used, see the examples in the [documentation](https://leahevy.de/cutyx/cutyx/examples.html).
 
+A simple usage is shown below:
+
+```bash
+cutyx match faces /path/to/some/image.jpg albums/some-album
+cutyx run
+```
+
+This will register similar face as in `image.jpg` to be automatically sorted into the `albums/some-album` directory. The second command will do the actual sorting (copying or symlinking).
+
 [The source for this project is available here.](https://github.com/leahevy/cutyx)
 
 ---
@@ -64,8 +73,8 @@ The following commands are available:
   <dd>Process images anywhere in a directory hierarchy.</dd>
   <dt><strong>process-image</strong></dt>
   <dd>Process a single image</dd>
-  <dt><strong>add-persons</strong></dt>
-  <dd>Add training data for persons found in a training image.</dd>
+  <dt><strong>match</strong></dt>
+  <dd>Group of commands to register matching conditions for album directories.</dd>
   <dt><strong>update-cache</strong></dt>
   <dd>Generates or updates the cache for processed images.</dd>
   <dt><strong>clear-cache</strong></dt>

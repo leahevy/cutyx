@@ -476,7 +476,7 @@ def handle_dry_run(dry_run: bool) -> None:
         print("[red]++ DRY RUN ++[/red]")
 
 
-def add_persons(
+def match_faces(
     album_dir: str,
     training_image_path: str,
     dry_run: bool = False,

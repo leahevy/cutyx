@@ -35,6 +35,7 @@ if __name__ == "__main__":
     _sys.path.append(_os.path.join(_os.path.dirname(__file__), ".."))
 
 from cutyx.__version__ import __version__
+from cutyx.cli_match import app as app_match
 
 app = typer.Typer(
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -46,6 +47,8 @@ You can check the individual --help option on the commands for more information.
 To run the main utility try the 'run' command.
 """,
 )
+
+app.add_typer(app_match, name="match")
 
 
 def version_callback(value: bool) -> None:
@@ -173,36 +176,6 @@ def process_image(
         delete_old=not no_delete_old,
         symlink=symlink,
         use_cache=not no_cache,
-    )
-
-
-@app.command()
-def add_persons(
-    training_image_path: str = typer.Argument(
-        ..., help="Training image containing the persons."
-    ),
-    album_dir: str = typer.Argument(
-        ...,
-        help="The album directory which should be configured to match the persons in the training image.",
-    ),
-    dry_run: bool = typer.Option(
-        False, "-n", "--dry-run", help="Only pretend to do anything."
-    ),
-    training_data_prefix: Optional[str] = typer.Option(
-        None,
-        "-p",
-        "--training-prefix",
-        help="Prefix for the training sample (default: no prefix).",
-    ),
-) -> None:
-    """Add training data for persons found in a training image to the target album directory."""
-    from cutyx import lib
-
-    lib.add_persons(
-        album_dir,
-        training_image_path,
-        dry_run=dry_run,
-        training_data_prefix=training_data_prefix,
     )
 
 

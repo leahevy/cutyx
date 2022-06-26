@@ -19,7 +19,7 @@ import os
 
 import pytest
 
-from cutyx.lib import add_persons, process_directory, process_image
+from cutyx.lib import match_faces, process_directory, process_image
 from tests import download_images
 
 
@@ -34,11 +34,11 @@ def gallery_path() -> str:
     return download_images.DIR
 
 
-def test_happy_path_dir(gallery_path: str) -> None:
+def test_lib_match_faces_dir(gallery_path: str) -> None:
     os.mkdir("albums")
 
     img1 = os.path.join(gallery_path, "einstein1.jpg")
-    add_persons("albums/a", img1, training_data_prefix="albert")
+    match_faces("albums/a", img1, training_data_prefix="albert")
 
     process_directory(gallery_path, "albums")
     files = [
@@ -47,11 +47,11 @@ def test_happy_path_dir(gallery_path: str) -> None:
     assert len(files) == 3
 
 
-def test_happy_path_single(gallery_path: str) -> None:
+def test_lib_match_faces_single(gallery_path: str) -> None:
     os.mkdir("albums")
 
     img1 = os.path.join(gallery_path, "einstein1.jpg")
-    add_persons("albums/a", img1, training_data_prefix="albert")
+    match_faces("albums/a", img1, training_data_prefix="albert")
 
     process_image(img1, "albums")
     files = [

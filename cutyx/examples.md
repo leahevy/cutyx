@@ -17,10 +17,10 @@ After that, ten example images will be available in `./tests/image-gallery`.
 Now setup two albums with training data to use it with **cutyx**:
 
 ```bash
-cutyx add-persons ./tests/image-gallery/linus1.jpg albums/linus
-cutyx add-persons ./tests/image-gallery/einstein1.jpg albums/einstein
-cutyx add-persons ./tests/image-gallery/einstein2.jpg albums/einstein
-cutyx add-persons ./tests/image-gallery/stallman1.jpg albums/stallman
+cutyx match faces ./tests/image-gallery/linus1.jpg albums/linus
+cutyx match faces ./tests/image-gallery/einstein1.jpg albums/einstein
+cutyx match faces ./tests/image-gallery/einstein2.jpg albums/einstein
+cutyx match faces ./tests/image-gallery/stallman1.jpg albums/stallman
 ```
 
 As you can see, you can add multiple faces to be classified for an album.
