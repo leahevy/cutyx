@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+v1.5.0 (2022-06-27)
+-------------------
+- Non case matching if not regex and not fuzzy. [Leah Lackner]
+
+
 v1.4.0 (2022-06-27)
 -------------------
 - Improve output on match. [Leah Lackner]
