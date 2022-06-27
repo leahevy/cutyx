@@ -19,10 +19,12 @@ import os
 import os.path
 import pathlib
 import pickle
+import re
 import shutil
 from typing import Any
 
 from rich import print
+from thefuzz import fuzz  # type: ignore
 
 from cutyx.exceptions import FacesException
 from cutyx.utils import copyfile, mksymlink
@@ -33,6 +35,8 @@ FACES_CACHE_DIR_NAME = os.path.join(CACHE_BASE_NAME, "faces")
 TRAINING_IMAGE_FILE_PART = ".trainingimage"
 TRAINING_IMAGE_DIR_EXT = TRAINING_IMAGE_FILE_PART + ".d"
 TRAINING_IMAGE_SRC_EXT = TRAINING_IMAGE_FILE_PART + ".src"
+
+NAMES_FILE_EXT = ".names"
 
 
 def is_included(
@@ -339,8 +343,11 @@ def handle_process_files(
             cache_root_dir: str | None = root_dir
             if not use_cache:
                 cache_root_dir = None
-            if do_process and person_matches(
-                file, album_dir, cache_root_dir=cache_root_dir, quiet=quiet
+            if do_process and (
+                name_matches(file, album_dir)
+                or face_matches(
+                    file, album_dir, cache_root_dir=cache_root_dir, quiet=quiet
+                )
             ):
                 # We got a match => Copy or symlink the file to the albums folder
                 num_processed += 1
@@ -476,6 +483,74 @@ def handle_dry_run(dry_run: bool) -> None:
         print("[red]++ DRY RUN ++[/red]")
 
 
+def match_names(
+    album_dir: str,
+    text: str,
+    dry_run: bool = False,
+    use_regex: bool = False,
+    use_fuzzy: bool = False,
+    fuzzy_min_ratio: int = 60,
+    rule_name: str | None = None,
+    quiet: bool = False,
+) -> None:
+    """Adds a rule to match files by name.
+
+    :param album_dir: The album to add the training data to.
+
+    :param text: The text to match by.
+
+    :param use_regex: Whether regular expressions should be used for matching.
+
+    :param use_fuzzy: Does a fuzzy match.
+
+    :param fuzzy_min_ratio: Minimum ratio to score a fuzzy match.
+
+    :param dry_run: Whether to only print the actions which would be executed.
+
+    :param rule_name: A name for the rule in the hidden album directory.
+        Can be used to make it easier to remove rules from the classification later.
+
+    :param quiet: Whether additional verbose output should be generated.
+    """
+    handle_dry_run(dry_run)
+
+    if use_regex:
+        if use_fuzzy:
+            raise FacesException("Fuzzy and Regex cannot be combined.")
+        try:
+            re.compile(text)
+        except re.error as e:
+            raise FacesException(f"Invalid regular expression: '{str(e)}'")
+
+    names_data = {
+        "text": text,
+        "use_regex": use_regex,
+        "use_fuzzy": use_fuzzy,
+        "fuzzy_min_ratio": fuzzy_min_ratio,
+    }
+
+    if not quiet:
+        print(
+            f"[green]++ Creating name rule '{text}' "
+            f"(regex={use_regex}, fuzzy={use_fuzzy}, fuzzy_ratio={fuzzy_min_ratio}) ++[/green]"
+        )
+
+    if rule_name:
+        output_file_name = rule_name + NAMES_FILE_EXT
+    else:
+        text_hash = hashlib.md5(text.encode("utf-8")).hexdigest()
+        output_file_name = text_hash + NAMES_FILE_EXT
+
+    output_file = os.path.join(album_dir, FACES_DIR_NAME, output_file_name)
+
+    if not dry_run:
+        pathlib.Path(os.path.dirname(output_file)).mkdir(
+            parents=True, exist_ok=True
+        )
+        with open(output_file, "w") as f:
+            f.write(json.dumps(names_data))
+
+
 def match_faces(
     album_dir: str,
     training_image_path: str,
@@ -529,11 +604,12 @@ def match_faces(
             f"  [blue]++ Create training data directory '{output_dir}' ++[/blue]"
         )
     # Re-generate the training data
-    try:
-        shutil.rmtree(output_dir)
-    except FileNotFoundError:
-        pass
-    pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
+    if not dry_run:
+        try:
+            shutil.rmtree(output_dir)
+        except FileNotFoundError:
+            pass
+        pathlib.Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     # Write all found face encodings
     for idx, encoding in enumerate(encodings):
@@ -640,7 +716,7 @@ def get_face_encodings(
         return encodings
 
 
-def person_matches(
+def face_matches(
     image_path: str,
     album_dir: str,
     cache_root_dir: str | None = None,
@@ -681,4 +757,40 @@ def person_matches(
                         )
                         if True in results:
                             return True
+    return False
+
+
+def name_matches(
+    image_path: str,
+    album_dir: str,
+) -> bool:
+    """Checks whether a file name matches."""
+    # If no faces directory exists, we cannot classify anything
+    faces_dir = os.path.join(album_dir, FACES_DIR_NAME)
+    if os.path.exists(faces_dir):
+        namefiles = [
+            f for f in os.listdir(faces_dir) if f.endswith(NAMES_FILE_EXT)
+        ]
+        for namefile in namefiles:
+            namefilepath = os.path.join(faces_dir, namefile)
+            with open(namefilepath, "r") as f:
+                namedata = json.loads(f.read())
+
+            if namedata["use_regex"]:
+                if re.match(
+                    re.compile(namedata["text"]), os.path.basename(image_path)
+                ):
+                    return True
+            elif namedata["use_fuzzy"]:
+                if (
+                    fuzz.token_sort_ratio(
+                        namedata["text"],
+                        os.path.splitext(os.path.basename(image_path))[0],
+                    )
+                    > namedata["fuzzy_min_ratio"]
+                ):
+                    return True
+            else:
+                if namedata["text"] in image_path:
+                    return True
     return False
