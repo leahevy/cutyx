@@ -38,7 +38,7 @@ cutyx match faces /path/to/some/image.jpg albums/some-album
 cutyx run
 ```
 
-This will register similar face as in `image.jpg` to be automatically sorted into the `albums/some-album` directory. The second command will do the actual sorting (copying or symlinking).
+This will register similar faces as in `image.jpg` to be automatically sorted into the `albums/some-album` directory. The second command will do the actual sorting (copying or symlinking).
 
 [The source for this project is available here.](https://github.com/leahevy/cutyx)
 
