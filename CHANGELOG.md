@@ -2,6 +2,11 @@ Changelog
 =========
 
 
+v1.3.0 (2022-06-27)
+-------------------
+- Re-structure CLI commands (add_person -> match.faces) [Leah Lackner]
+
+
 v1.2.2 (2022-06-26)
 -------------------
 - Use pip cache in workflows. [Leah Lackner]
