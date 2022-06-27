@@ -21,7 +21,7 @@ import pathlib
 import pickle
 import re
 import shutil
-from typing import Any
+from typing import Any, Callable
 
 from rich import print
 from thefuzz import fuzz  # type: ignore
@@ -343,11 +343,20 @@ def handle_process_files(
             cache_root_dir: str | None = root_dir
             if not use_cache:
                 cache_root_dir = None
-            if do_process and (
-                name_matches(file, album_dir)
-                or face_matches(
-                    file, album_dir, cache_root_dir=cache_root_dir, quiet=quiet
-                )
+            if do_process and any_matches(
+                [
+                    ("name", lambda: name_matches(file, album_dir)),
+                    (
+                        "face",
+                        lambda: face_matches(
+                            file,
+                            album_dir,
+                            cache_root_dir=cache_root_dir,
+                            quiet=quiet,
+                        ),
+                    ),
+                ],
+                quiet=quiet,
             ):
                 # We got a match => Copy or symlink the file to the albums folder
                 num_processed += 1
@@ -716,12 +725,26 @@ def get_face_encodings(
         return encodings
 
 
+def any_matches(
+    handlers: list[tuple[str, Callable[[], tuple[bool, str]]]],
+    quiet: bool = False,
+) -> bool:
+    for handler in handlers:
+        name, fun = handler
+        res, msg = fun()
+        if res:
+            if not quiet:
+                print(f"    [brown]++ {name} ({msg}) rule matched ++[/brown]")
+            return True
+    return False
+
+
 def face_matches(
     image_path: str,
     album_dir: str,
     cache_root_dir: str | None = None,
     quiet: bool = False,
-) -> bool:
+) -> tuple[bool, str]:
     """Checks whether a person matches to one of the configured training data images
     in the given album directory.
     """
@@ -756,14 +779,17 @@ def face_matches(
                             [deserialized_from_json], query_encoding
                         )
                         if True in results:
-                            return True
-    return False
+                            return True, (
+                                f"'{os.path.basename(album_dir)}'"
+                                f".'{os.path.basename(trainingdir)}'"
+                            )
+    return False, ""
 
 
 def name_matches(
     image_path: str,
     album_dir: str,
-) -> bool:
+) -> tuple[bool, str]:
     """Checks whether a file name matches."""
     # If no faces directory exists, we cannot classify anything
     faces_dir = os.path.join(album_dir, FACES_DIR_NAME)
@@ -780,7 +806,7 @@ def name_matches(
                 if re.match(
                     re.compile(namedata["text"]), os.path.basename(image_path)
                 ):
-                    return True
+                    return True, f"'{namedata['text']}'"
             elif namedata["use_fuzzy"]:
                 if (
                     fuzz.token_sort_ratio(
@@ -789,8 +815,8 @@ def name_matches(
                     )
                     > namedata["fuzzy_min_ratio"]
                 ):
-                    return True
+                    return True, f"'{namedata['text']}'"
             else:
                 if namedata["text"] in image_path:
-                    return True
-    return False
+                    return True, f"'{namedata['text']}'"
+    return False, ""
