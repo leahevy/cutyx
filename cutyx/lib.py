@@ -817,6 +817,8 @@ def name_matches(
                 ):
                     return True, f"'{namedata['text']}'"
             else:
-                if namedata["text"] in image_path:
+                if namedata["text"].lower() in os.path.basename(
+                    image_path.lower()
+                ):
                     return True, f"'{namedata['text']}'"
     return False, ""
