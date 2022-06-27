@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+v1.4.0 (2022-06-27)
+-------------------
+- Improve output on match. [Leah Lackner]
+- Implement match.names. [Leah Lackner]
+- Typo. [Leah Lackner]
+
+
 v1.3.0 (2022-06-27)
 -------------------
 - Re-structure CLI commands (add_person -> match.faces) [Leah Lackner]
